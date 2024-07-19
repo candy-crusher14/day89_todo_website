@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% include 'header.html' %}
+{% from "bootstrap5/form.html" import render_form %}
+
+
+
+{% block content %}
+
+
+
+
+<div class="container">
+        <h1 class="mb-5"><em>{{ current_user.name }}'s To-Do List</em></h1>
+
+    {% for todo in todos %}
+        <div class="task my-2">
+            <div class="card col-lg-8">
+                <div class="card-body fs-5">{{ todo.description }}</div>
+                    </div>
+                {% if todo.status == 'Past due' %}
+                <span class="badge rounded-pill status bg-danger ">
+                {{ todo.status }}</span>
+
+                {% elif todo.status == 'Due today' %}
+                    <span class="badge rounded-pill status bg-success ">
+                {{ todo.status }}</span>
+            {% elif todo.status == 'On time' %}
+                    <span class="badge rounded-pill status bg-warning ">
+                {{ todo.status }}</span>
+            {% endif %}
+
+            <div class="due-date">{{ todo.due_date }}</div>
+            <a class="btn btn-outline-success" href="{{ url_for('complete', id = todo.id) }}">Complete</a>
+        </div>
+    {% endfor %}
+
+
+
+<form action="{{ url_for('homepage') }}" method="post">
+    {{ form.hidden_tag() }}
+        <div class="task my-2">
+            <div class="card col-lg-8">
+                {{ form.description(class="card-body fs-5 bg-white", placeholder="New Task Description") }}
+                    </div>
+                <span class="badge rounded-pill status bg-primary mx-1">
+                New</span>
+            {{ form.due_date(class="due-date bg-white text-black px-2 mx-1") }}
+
+            {{ form.submit(class="btn btn-outline-success ") }}
+
+        </div>
+</form>
+
+
+
+
+
+
+  {% include  'footer.html' %}
+
+
+    {% endblock %}
+
+
